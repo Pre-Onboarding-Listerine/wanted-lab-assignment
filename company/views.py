@@ -6,15 +6,16 @@ from django.views     import View
 from .models      import Company, CompanyName, Tag
 
 class CompanyDetailView(View):
-    def get(self, request):
+    def get(self, request, keyword):
         try:
-            keyword = request.GET.get('keyword', None)
-
+            language = request.headers.get('x-wanted-language')
             companyname = CompanyName.objects.get(name=keyword)
             
+            user_company_name = CompanyName.objects.get(company_id=companyname.company.id,lang=language)
+
             company_info ={
-                'company_name' : companyname.name,
-                'tags' : [tag.name for tag in companyname.company.tags.all()]
+                'company_name' : user_company_name.name,
+                'tags' : [tag.name for tag in companyname.company.tags.all() if tag.lang ==language]
             }
 
             return JsonResponse({'message': company_info}, status=200)

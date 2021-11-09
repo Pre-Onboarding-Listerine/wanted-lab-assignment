@@ -1,8 +1,7 @@
 from django.db import models
 
 class Company(models.Model):
-    tags         = models.ManyToManyField('Tag', through='CompanyTag', blank=True)
-    lang         = models.CharField(max_length=100, null=True)
+    tags = models.ManyToManyField('Tag', through='CompanyTag', blank=True)
 
     class Meta:
         db_table = 'companies'
@@ -16,7 +15,7 @@ class CompanyTag(models.Model):
 
 class Tag(models.Model):
     name = models.CharField(max_length=100)
-    lang = models.CharField(max_length=100, null=True)
+    lang = models.CharField(max_length=100)
     
     class Meta:
         db_table = 'tags'
@@ -24,6 +23,7 @@ class Tag(models.Model):
 class CompanyName(models.Model):
     name    = models.CharField(max_length=100)
     company = models.ForeignKey('Company', on_delete=models.CASCADE)
+    lang    = models.CharField(max_length=100)
 
     class Meta:
         db_table = 'company_names'
