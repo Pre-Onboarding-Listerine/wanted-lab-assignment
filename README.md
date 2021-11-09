@@ -73,7 +73,8 @@
 
 ### ERD
 
-![image](https://user-images.githubusercontent.com/32446834/140742775-762f9b50-2b0d-4f9d-85f1-dc229d478587.png)
+![image](https://user-images.githubusercontent.com/32446834/140933757-8d82b561-f3ce-41af-8c7f-d1b0988d7047.png)
+
 
 ## 실행환경 설절 방법
 
