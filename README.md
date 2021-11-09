@@ -53,8 +53,6 @@
 <어떤 로직으로 동작하는지 HTTP request 생성부터 HTTP response 반환까지 설명하기>
 
 ### 회사명으로 회사 검색하기
-
-<어떤 로직으로 동작하는지 HTTP request 생성부터 HTTP response 반환까지 설명하기>
 1. /companies/keyword의 url에서 keyword에 회사이름을 입력하여 검색합니다.
 2. Header의 x_wanted_language로 ko(한국), en(영어), ja(일본) 등 언어를 선택하여 입력합니다.
 3. keyword에 입력된 회사이름과 header에서 선택한 언어를 토대로 회사이름과 태그를 출력할 수 있도록 구현하였습니다.
@@ -73,6 +71,7 @@
     }
 }
 ```
+
 ```commandline
 * response status: 404 
 * response content:
@@ -80,6 +79,7 @@
     "message": "Does_Not_Exist_Error"
 }
 ```
+
 ### 새로운 회사 추가하기
 
 <어떤 로직으로 동작하는지 HTTP request 생성부터 HTTP response 반환까지 설명하기>
