@@ -26,7 +26,7 @@ def test_company_name_autocomplete(api: Client):
     ]
 
 
-def test_company_search(api):
+def test_company_search(api: Client):
     """
     2. 회사 이름으로 회사 검색
     header의 x-wanted-language 언어값에 따라 해당 언어로 출력되어야 합니다.
@@ -55,7 +55,7 @@ def test_company_search(api):
     assert resp.status_code == 404
 
 
-def test_new_company(api):
+def test_new_company(api: Client):
     """
     3.  새로운 회사 추가
     새로운 언어(tw)도 같이 추가 될 수 있습니다.
