@@ -16,9 +16,7 @@ class SearchView(APIView):
 			companies  = CompanyName.objects.filter(name__icontains = word)
 			
 			if not companies:
-				return JsonResponse({[
-		        {"company_name": "wecode_wanted"},
-        {"company_name": "wecode"}]},status=200)
+				return JsonResponse({"message": "회사를 찾을 수 없습니다."},status=200)
 			
 			for company in companies:
 				results.append({"company_name": company.name})			
