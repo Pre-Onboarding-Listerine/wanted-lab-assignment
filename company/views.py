@@ -35,11 +35,14 @@ class CompanyView(View):
         user_lang = request.headers.get('x-wanted-language', 'ko')
         keyword = request.GET.get('query', '')
 
-        company_names = CompanyName.objects.filter(name__icontains=keyword)
+        company_names = list(CompanyName.objects.filter(name__icontains=keyword))
+
+        company_ids = list(map(lambda company_name: company_name.company.id, company_names))
+        global_company_names = CompanyName.objects.filter(company_id__in=company_ids)
 
         results = [
             {'company_name': company_name.name}
-            for company_name in company_names
+            for company_name in global_company_names
             if company_name.lang == user_lang
         ]
         return JsonResponse(data={'data': results}, status=200)
