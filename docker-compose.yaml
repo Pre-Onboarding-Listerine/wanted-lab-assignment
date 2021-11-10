@@ -5,13 +5,13 @@ services:
       context: .
       dockerfile: ./Dockerfile
     ports:
-      - '8080:8080'
+      - '8002:8002'
     depends_on:
       - mysql
     volumes:
       - './:/app'
     entrypoint: ["dockerize", "-wait", "tcp://mysql:3306", "-timeout", "20s"]
-    command: ["python", "manage.py", "runserver", "0.0.0.0:8080"]
+    command: ["python", "manage.py", "runserver", "0.0.0.0:8002"]
 
   mysql:
     image: mysql
