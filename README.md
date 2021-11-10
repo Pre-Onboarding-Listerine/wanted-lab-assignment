@@ -50,39 +50,139 @@
 
 ### 회사명 자동완성하기
 
-<어떤 로직으로 동작하는지 HTTP request 생성부터 HTTP response 반환까지 설명하기>
+- 입력된 문자열에 따라 검색할 회사명을 자동으로 완성합니다.
 
-### 회사명으로 회사 검색하기
-1. /companies/keyword의 url에서 keyword에 회사이름을 입력하여 검색합니다.
-2. Header의 x_wanted_language로 ko(한국), en(영어), ja(일본) 등 언어를 선택하여 입력합니다.
-3. keyword에 입력된 회사이름과 header에서 선택한 언어를 토대로 회사이름과 태그를 출력할 수 있도록 구현하였습니다.
-4. 검색된 회사가 없는 경우 404를 리턴하고 에러메시지가 출력됩니다.
+**구현 내용**
+
+- Query Parameter로 전달된 `query`를 키워드로 사용합니다.
+- 해당 키워드가 포함된 회사명을 모두 찾습니다.
+- 찾은 회사명들을 이용해 다른 언어로 표현되는 같은 회사의 회사명들을 모두 찾습니다.
+- 이후에 `x-wanted-language` 헤더 값에 맞는 언어로 표현된 회사명들을 추려서 반환합니다.
+
+**요청 예시**
+
+```http request
+GET /search?query="지오"
+x-wanted-language: "en"
+```
+
+  **응답 예시**
 
 ```commandline
-* response status: 200 
+* response status: 200 OK
 * response content:
 {
-    "message": {
-        "company_name": "Wantedlab",
-        "tags": [
-            "tag3",
-            "tag2"
-        ]
-    }
+    "data": [
+        {
+            "company_name": "GEOCM Co."
+        }
+    ]
 }
 ```
 
+
+### 회사명으로 회사 검색하기
+
+- `/companies/<keyword>`의 url에서 `keyword`에 회사이름을 입력하여 검색합니다.
+
+**구현 내용**
+
+1. Header의 `x-wanted-language`로 ko(한국), en(영어), ja(일본) 등 언어를 선택하여 입력합니다.
+2. keyword에 입력된 회사이름과 header에서 선택한 언어를 토대로 회사이름과 태그를 출력할 수 있도록 구현하였습니다.
+3. 검색된 회사가 없는 경우 404를 리턴하고 에러메시지가 출력됩니다.
+4. 
+**요청 예시**
+
+```http request
+GET /companies/<keyword>
+x-wanted-language: "ko"
+content-type: "application/json"
+```
+
+**응답 예시**
+
 ```commandline
-* response status: 404 
+* response status: 200 OK
 * response content:
 {
-    "message": "Does_Not_Exist_Error"
+    "company_name": "원티드랩",
+    "tags": [
+        "태그_4",
+        "태그_20",
+        "태그_16"
+    ]
+}
+
+* response status: 404 Not Found
+* response content:
+{
+    "message": "company not found"
 }
 ```
 
 ### 새로운 회사 추가하기
 
-<어떤 로직으로 동작하는지 HTTP request 생성부터 HTTP response 반환까지 설명하기>
+- 새로운 회사에 대한 회사 이름과 태그를 추가합니다.
+
+**구현 내용**
+
+1. 새로운 회사를 생성합니다.
+2. 새로운 회사명을 생성하면서 생성한 회사와 맵핑시켜줍니다.
+3. 새로운 태그를 생성하면서 생성한 회사와 맵핑시켜줍니다.
+4. 생성한 회사의 회사명과 태그명들을 `x-wanted-language` 헤더 값에 맞게 추려 반환합니다.
+
+**요청 예시**
+
+```http request
+GET /companies
+x-wanted-language: "ko"
+content-type: "application/json"
+{
+    "company_name": {
+        "ko": "라인 프레쉬",
+        "tw": "LINE FRESH",
+        "en": "LINE FRESH",
+    },
+    "tags": [
+        {
+            "tag_name": {
+                "ko": "태그_1",
+                "tw": "tag_1",
+                "en": "tag_1",
+            }
+        },
+        {
+            "tag_name": {
+                "ko": "태그_8",
+                "tw": "tag_8",
+                "en": "tag_8",
+            }
+        },
+        {
+            "tag_name": {
+                "ko": "태그_15",
+                "tw": "tag_15",
+                "en": "tag_15",
+            }
+        }
+    ]
+}
+```
+
+**응답 예시**
+
+```commandline
+* response status: 201 Create
+* response content:
+{
+    "company_name": "LINE FRESH",
+    "tags": [
+        "tag_1",
+        "tag_8",
+        "tag_15",
+    ],
+}
+```
 
 ## 모델 관계
 
@@ -146,7 +246,7 @@
 3. 배포된 서버의 주소
 
     ```commandline
-    
+    http://3.37.127.222:8002
     ```
 
 # Reference
