@@ -6,7 +6,7 @@ from django.http import JsonResponse
 from company.models import Company, CompanyName, Tag, CompanyTag
 
 
-class CreateCompanyView(View):
+class CompanyView(View):
     def post(self, request):
         user_lang = request.headers.get('x-wanted-language', 'ko')
         data = json.loads(request.body)
@@ -30,6 +30,19 @@ class CreateCompanyView(View):
         }
 
         return JsonResponse(data=ret_data, status=201)
+
+    def get(self, request):
+        user_lang = request.headers.get('x-wanted-language', 'ko')
+        keyword = request.GET.get('query', '')
+
+        company_names = CompanyName.objects.filter(name__icontains=keyword)
+
+        results = [
+            {'company_name': company_name.name}
+            for company_name in company_names
+            if company_name.lang == user_lang
+        ]
+        return JsonResponse(data={'data': results}, status=200)
 
 
 class SearchCompanyView(View):

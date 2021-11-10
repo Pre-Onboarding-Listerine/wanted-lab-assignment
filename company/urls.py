@@ -1,8 +1,8 @@
 from django.urls import path
 
-from company.views import CreateCompanyView, SearchCompanyView
+from company.views import CompanyView, SearchCompanyView
 
 urlpatterns = [
-    path('', CreateCompanyView.as_view()),
+    path('', CompanyView.as_view()),
     path('/<str:keyword>', SearchCompanyView.as_view()),
 ]

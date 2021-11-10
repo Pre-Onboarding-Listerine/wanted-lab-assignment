@@ -17,8 +17,68 @@ def test_company_name_autocomplete(api: Client):
     header의 x-wanted-language 언어값에 따라 해당 언어로 출력되어야 합니다.
     """
     headers = {"HTTP_x-wanted-language": "ko"}
+    api.post(
+        "/companies",
+        data=json.dumps({
+            "company_name": {
+                "ko": "주식회사 링크드코리아"
+            },
+            "tags": [
+                {
+                    "tag_name": {
+                        "ko": "태그_12",
+                        "en": "tag_12",
+                        "ja": "タグ_12"
+                    }
+                },
+                {
+                    "tag_name": {
+                        "ko": "태그_6",
+                        "en": "tag_6",
+                        "ja": "タグ_6"
+                    }
+                },
+                {
+                    "tag_name": {
+                        "ko": "태그_8",
+                        "en": "tag_8",
+                        "ja": "タグ_8"
+                    }
+                }
+            ]
+        }),
+        **headers,
+        content_type="application/json"
+    )
+    api.post(
+        "/companies",
+        data=json.dumps({
+            "company_name": {
+                "ko": "스피링크"
+            },
+            "tags": [
+                {
+                    "tag_name": {
+                        "ko": "태그_19",
+                        "en": "tag_19",
+                        "ja": "タグ_19"
+                    }
+                },
+                {
+                    "tag_name": {
+                        "ko": "태그_9",
+                        "en": "tag_9",
+                        "ja": "タグ_9"
+                    }
+                }
+            ]
+        }),
+        **headers,
+        content_type="application/json"
+    )
+
     resp = api.get("/search?query=링크", **headers)
-    searched_companies = json.loads(resp.data)
+    searched_companies = json.loads(resp.content)['data']
 
     assert resp.status_code == 200
     assert searched_companies == [
