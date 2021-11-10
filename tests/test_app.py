@@ -9,6 +9,7 @@ def api():
     return Client()
 
 
+@pytest.mark.django_db
 def test_company_name_autocomplete(api: Client):
     """
     1. 회사명 자동완성
@@ -17,7 +18,7 @@ def test_company_name_autocomplete(api: Client):
     """
     headers = {"HTTP_x-wanted-language": "ko"}
     resp = api.get("/search?query=링크", **headers)
-    searched_companies = resp.data
+    searched_companies = json.loads(resp.data)
 
     assert resp.status_code == 200
     assert searched_companies == [
@@ -26,6 +27,7 @@ def test_company_name_autocomplete(api: Client):
     ]
 
 
+@pytest.mark.django_db
 def test_company_search(api: Client):
     """
     2. 회사 이름으로 회사 검색
@@ -36,7 +38,7 @@ def test_company_search(api: Client):
         "/companies/Wantedlab",
         **headers
     )
-    company = resp.data
+    company = json.loads(resp.content)
     assert resp.status_code == 200
     assert company == {
         "company_name": "원티드랩",
@@ -55,6 +57,7 @@ def test_company_search(api: Client):
     assert resp.status_code == 404
 
 
+@pytest.mark.django_db
 def test_new_company(api: Client):
     """
     3.  새로운 회사 추가
@@ -94,10 +97,11 @@ def test_new_company(api: Client):
                 }
             ]
         }),
+        content_type='application/json',
         **headers,
     )
 
-    company = resp.data
+    company = json.loads(resp.content)
     assert company == {
         "company_name": "LINE FRESH",
         "tags": [
