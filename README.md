@@ -172,7 +172,7 @@ content-type: "application/json"
 **응답 예시**
 
 ```commandline
-* response status: 201 Create
+* response status: 201 Created
 * response content:
 {
     "company_name": "LINE FRESH",
