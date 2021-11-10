@@ -20,7 +20,7 @@ class CreateCompanyView(View):
             CompanyName.objects.create(name=co_name, lang=co_lang, company=company)
 
         for tag in tags:
-            for tag_lang, tag_name in tag.items():
+            for tag_lang, tag_name in tag['tag_name'].items():
                 new_tag = Tag.objects.create(lang=tag_lang, name=tag_name)
                 CompanyTag.objects.create(company_id=company.id, tag_id=new_tag.id)
 
@@ -30,3 +30,20 @@ class CreateCompanyView(View):
         }
 
         return JsonResponse(data=ret_data, status=201)
+
+
+class SearchCompanyView(View):
+    def get(self, request, keyword):
+        user_lang = request.headers.get('x-wanted-language', 'ko')
+
+        try:
+            company_name = CompanyName.objects.get(name=keyword)
+        except CompanyName.DoesNotExist:
+            return JsonResponse({'message': 'company not found'}, status=404)
+        else:
+            user_company_name = CompanyName.objects.get(company_id=company_name.company.id, lang=user_lang)
+            company_info = {
+                'company_name': user_company_name.name,
+                'tags': [tag.name for tag in user_company_name.company.tags.all() if tag.lang == user_lang]
+            }
+            return JsonResponse(data=company_info, status=200)

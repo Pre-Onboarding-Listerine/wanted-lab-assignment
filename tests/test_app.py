@@ -33,6 +33,43 @@ def test_company_search(api: Client):
     2. 회사 이름으로 회사 검색
     header의 x-wanted-language 언어값에 따라 해당 언어로 출력되어야 합니다.
     """
+    # 테스트 데이터를 추가합니다.
+    headers = {"HTTP_x-wanted-language": "ko"}
+    api.post(
+        "/companies",
+        data=json.dumps({
+            "company_name": {
+                "ko": "원티드랩",
+                "en": "Wantedlab"
+            },
+            "tags": [
+                {
+                    "tag_name": {
+                        "ko": "태그_4",
+                        "en": "tag_4",
+                        "ja": "タグ_4"
+                    }
+                },
+                {
+                    "tag_name": {
+                        "ko": "태그_20",
+                        "en": "tag_20",
+                        "ja": "タグ_20"
+                    }
+                },
+                {
+                    "tag_name": {
+                        "ko": "태그_16",
+                        "en": "tag_16",
+                        "ja": "タグ_16"
+                    }
+                }
+            ]
+        }),
+        content_type='application/json',
+        **headers,
+    )
+
     headers = {"HTTP_x-wanted-language": "ko"}
     resp = api.get(
         "/companies/Wantedlab",
