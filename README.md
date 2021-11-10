@@ -241,7 +241,7 @@ content-type: "application/json"
     $ pytest
     ```
    
-2. POSTMAN 확인: <post api document 주소>
+2. POSTMAN 확인: https://documenter.getpostman.com/view/12446432/UVC5FnTh
 
 3. 배포된 서버의 주소
 
